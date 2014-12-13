@@ -9,7 +9,7 @@ Extension consists of 2 parts:
 Tested with ExtJs 5.1 and DeftJS5
 
 ##Interface Manager
-Ext.InterfaceManager provides functionality for registering interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
+Ext.InterfaceManager provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
 
 ###Interface definition
 
@@ -64,11 +64,12 @@ Ext.define('MultiImplementation', {
     }
 });
 ```
-If class doesn't implement all methods of all specified interfaces, an exception wil be thrown.
+If class doesn't implement all methods of all specified interfaces, an exception will be thrown.
 
 ###In action
 
 All interfaces and classes  have 3 methods: **as, is and isTheSameAs**
+
 Casting class instance to interface:
 ```js
 var classInstance = new MultiImplementation();
@@ -195,7 +196,7 @@ Ext.define('SingletonWithInjectionTest', {
     }
 });
 ```
-Deferred singleton is instantiated only when all scripts are loaded
+Deferred singleton is instantiated only when all scripts are loaded.
 
 To suppress implementation use **suppress** config in class definition:
 ```js
