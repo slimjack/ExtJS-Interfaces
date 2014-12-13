@@ -1,4 +1,5 @@
-﻿Ext.define("Ext.InterfaceManager", {
+﻿//https://github.com/slimjack/ExtJs-Interfaces
+Ext.define("Ext.InterfaceManager", {
     singleton: true,
     registeredInterfaces: {},
 

@@ -1,4 +1,4 @@
-﻿/// <reference path="Libs/Lookup.js" />
+﻿//https://github.com/slimjack/ExtJs-Interfaces
 Ext.define("Ext.InterfaceInjector", {
     singleton: true,
     requires: ['Ext.InterfaceManager', 'Ext.util.Lookup'],
