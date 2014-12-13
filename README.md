@@ -9,7 +9,7 @@ Extension consists of 2 parts:
 Tested with ExtJs 5.1 and DeftJS5
 
 ##Interface Manager
-Ext.InterfaceManager provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
+**Ext.InterfaceManager** provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
 
 ###Interface definition
 
