@@ -1,6 +1,4 @@
-﻿//TODO: Array iteration should be replaced with 'for' loop
-/// <reference path="~/../HIS.Library/Scripts/ext-all-debug.js" />
-Ext.define('Ext.util.Lookup', {
+﻿Ext.define('Ext.util.Lookup', {
     statics: {
         fromArray: function (array, keySelector, valueSelector) {
             var lookup = new Ext.util.Lookup();
