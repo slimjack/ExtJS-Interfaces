@@ -221,7 +221,7 @@ Ext.define('ConsoleLogger', {
     implement: 'ILogger',
     suppress: 'DefaultLogger',
     log: function (msg) {
-        alert(msg);
+        console.log(msg);
     }
 });
 instance.test();//will print 'test' to console
