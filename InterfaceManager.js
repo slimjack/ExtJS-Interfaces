@@ -50,7 +50,7 @@
         }
 
         var result = false;
-        Ext.Array.forEach(instance.implement, function (implementedInterfaceName) {
+        Ext.Array.each(instance.implement, function (implementedInterfaceName) {
             result = me.inherits(implementedInterfaceName, interfaceName);
             if (result) {
                 return false;
@@ -78,7 +78,7 @@
     eachParent: function (interfaceName, fn) {
         var me = this;
         if (me.registeredInterfaces[interfaceName]) {
-            Ext.Array.forEach(me.registeredInterfaces[interfaceName].parents, function (parentInterfaceName) {
+            Ext.Array.each(me.registeredInterfaces[interfaceName].parents, function (parentInterfaceName) {
                 if (fn(parentInterfaceName) === false) {
                     return false;
                 }
@@ -94,6 +94,9 @@
         classInstance.interfaces = classInstance.interfaces || {};
         if (classInstance.interfaces[interfaceName]) {
             return classInstance.interfaces[interfaceName];
+        }
+        if (!me.instanceImplements(classInstance, interfaceName)) {
+            return null;
         }
         var interfaceMethods = me.registeredInterfaces[interfaceName].methods;
         var interface_ = {

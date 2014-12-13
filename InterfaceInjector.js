@@ -42,7 +42,7 @@ Ext.define("Ext.InterfaceInjector", {
             implementedInterfaces = Ext.Array.from(implementedInterfaces);
             //ISingleton has higher instantiation priority
             var isSingleton = false;
-            Ext.Array.forEach(implementedInterfaces, function (implementedInterfaceName) {
+            Ext.Array.each(implementedInterfaces, function (implementedInterfaceName) {
                 isSingleton = Ext.InterfaceManager.isDerivedFrom(implementedInterfaceName, 'ISingleton');
                 if (isSingleton) {
                     return false;
