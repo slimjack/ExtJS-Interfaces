@@ -68,7 +68,7 @@ If class doesn't implement all methods of all specified interfaces, an exception
 
 ###In action
 
-All interfaces and classes  have 3 methods: **as, is and isTheSameAs**
+All interfaces and classes  have 3 methods: **as**, **is** and **isTheSameAs**
 
 Casting class instance to interface:
 ```js
