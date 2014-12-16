@@ -116,8 +116,8 @@ Ext.define("Ext.InterfaceManager", {
                 return classInstance.is(interfaceOrClassName);
             },
             //Checks if another interface or class instance belongs to the same class instance
-            isTheSameAs: function (interfaceOrClassInstance) {
-                return classInstance.isTheSameAs(interfaceOrClassInstance);
+            equals: function (interfaceOrClassInstance) {
+                return classInstance.equals(interfaceOrClassInstance);
             }
         };
 
@@ -195,7 +195,7 @@ Ext.define("Ext.InterfaceManager", {
                 }
             },
             //Checks if interface belongs to this class instance or specified class instance is this class instance
-            isTheSameAs: function (interfaceOrClassInstance) {
+            equals: function (interfaceOrClassInstance) {
                 return (interfaceOrClassInstance === this) || (this.interfaces && this.interfaces[interfaceOrClassInstance.$interfaceName] === interfaceOrClassInstance);
             }
         });

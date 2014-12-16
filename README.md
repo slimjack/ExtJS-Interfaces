@@ -68,7 +68,7 @@ If class doesn't implement all methods of all specified interfaces, an exception
 
 ###In action
 
-All interfaces and classes  have 3 methods: **as**, **is** and **isTheSameAs**
+All interfaces and classes  have 3 methods: **as**, **is** and **equals**
 
 Casting class instance to interface:
 ```js
@@ -101,19 +101,20 @@ base2Interface.is('MultiImplementation');//true
 base2Interface.is('IDerived2');//false
 ```
 
-To compare interface references or class instance references use **isTheSameAs** method:
+To compare interface references or class instance references use **equals** method:
 ```js
 var anotherClassInstance = new MultiImplementation();
 var anotherBaseInterface = anotherClassInstance.as('IBase');
 
-classInstance.isTheSameAs(base2Interface);//true
-classInstance.isTheSameAs(baseInterface);//true
-classInstance.isTheSameAs(anotherBaseInterface);//false
-baseInterface.isTheSameAs(classInstance);//true
-baseInterface.isTheSameAs(base2Interface);//true
-baseInterface.isTheSameAs(anotherBaseInterface);//false
-baseInterface.isTheSameAs(anotherClassInstance);//false
+classInstance.equals(base2Interface);//true
+classInstance.equals(baseInterface);//true
+classInstance.equals(anotherBaseInterface);//false
+baseInterface.equals(classInstance);//true
+baseInterface.equals(base2Interface);//true
+baseInterface.equals(anotherBaseInterface);//false
+baseInterface.equals(anotherClassInstance);//false
 ```
+Equality means that compared interfaces belong to the same class instance
 
 ##Interface Injector
 **Ext.InterfaceInjector** extends DeftJs injection system with ability to inject interface instances. It defines 2 interfaces: **IDependency** and **ISingleton** (derived from **IDependency**).
