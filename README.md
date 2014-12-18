@@ -68,7 +68,7 @@ If class doesn't implement all methods of all specified interfaces, an exception
 
 ###In action
 
-All interfaces and classes  have 3 methods: **$as**, **$is** and **$equals**
+All interfaces and classes  have 3 methods: **$as**, **$is** and **$equals**. **$** is used to avoid conflicts with existing methods.
 
 Casting class instance to interface:
 ```js
