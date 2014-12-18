@@ -92,44 +92,44 @@ Ext.define("Ext.InterfaceManager", {
     //region Private
     getInterface: function (classInstance, interfaceName) {
         var me = this;
-        classInstance.interfaces = classInstance.interfaces || {};
-        if (classInstance.interfaces[interfaceName]) {
-            return classInstance.interfaces[interfaceName];
+        classInstance._interfaces = classInstance._interfaces || {};
+        if (classInstance._interfaces[interfaceName]) {
+            return classInstance._interfaces[interfaceName];
         }
         if (!me.instanceImplements(classInstance, interfaceName)) {
             return null;
         }
         var interfaceMethods = me.registeredInterfaces[interfaceName].methods;
-        var interface_ = {
-            $interfaceName: interfaceName,
+        var $interface = {
+            _interfaceName: interfaceName,
             //Casts interface to another interface or to class instance
-            as: function (interfaceOrClassName) {
+            $as: function (interfaceOrClassName) {
                 if (Ext.isFunction(interfaceOrClassName) || window[interfaceOrClassName]) {
                     var ctorToCompare = Ext.isFunction(interfaceOrClassName) ? interfaceOrClassName : window[interfaceOrClassName];
                     return classInstance instanceof ctorToCompare ? classInstance : null;
                 } else {
-                    return classInstance.as(interfaceOrClassName);
+                    return classInstance.$as(interfaceOrClassName);
                 }
             },
             //Checks if interface may be casted to specified class or interface
-            is: function (interfaceOrClassName) {
-                return classInstance.is(interfaceOrClassName);
+            $is: function (interfaceOrClassName) {
+                return classInstance.$is(interfaceOrClassName);
             },
             //Checks if another interface or class instance belongs to the same class instance
-            equals: function (interfaceOrClassInstance) {
-                return classInstance.equals(interfaceOrClassInstance);
+            $equals: function (interfaceOrClassInstance) {
+                return classInstance.$equals(interfaceOrClassInstance);
             }
         };
 
         Ext.Array.forEach(interfaceMethods, function (methodName) {
             if (Ext.isFunction(classInstance[methodName])) {
-                interface_[methodName] = Ext.bind(classInstance[methodName], classInstance);
+                $interface[methodName] = Ext.bind(classInstance[methodName], classInstance);
             } else {
                 Ext.Error.raise('"' + classInstance.$className + '" has no implementation for "' + interfaceName + '.' + methodName + '".');
             }
         });
-        classInstance.interfaces[interfaceName] = interface_;
-        return interface_;
+        classInstance._interfaces[interfaceName] = $interface;
+        return $interface;
     },
 
     inherits: function (targetInterfaceName, parentInterfaceName) {
@@ -182,11 +182,11 @@ Ext.define("Ext.InterfaceManager", {
         //Add basic interface access methods to all classes
         Ext.Base.addMembers({
             //Casts class instance to specified interface
-            as: function (interfaceName) {
+            $as: function (interfaceName) {
                 return me.getInterface(this, interfaceName);
             },
             //Checks if class instance is of specified class or may be casted to specified interface
-            is: function (interfaceOrClassName) {
+            $is: function (interfaceOrClassName) {
                 if (Ext.isFunction(interfaceOrClassName) || window[interfaceOrClassName]) {
                     var ctorToCompare = Ext.isFunction(interfaceOrClassName) ? interfaceOrClassName : window[interfaceOrClassName];
                     return this instanceof ctorToCompare;
@@ -195,8 +195,8 @@ Ext.define("Ext.InterfaceManager", {
                 }
             },
             //Checks if interface belongs to this class instance or specified class instance is this class instance
-            equals: function (interfaceOrClassInstance) {
-                return (interfaceOrClassInstance === this) || (this.interfaces && this.interfaces[interfaceOrClassInstance.$interfaceName] === interfaceOrClassInstance);
+            $equals: function (interfaceOrClassInstance) {
+                return (interfaceOrClassInstance === this) || (this._interfaces && this._interfaces[interfaceOrClassInstance._interfaceName] === interfaceOrClassInstance);
             }
         });
     }

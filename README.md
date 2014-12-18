@@ -68,12 +68,12 @@ If class doesn't implement all methods of all specified interfaces, an exception
 
 ###In action
 
-All interfaces and classes  have 3 methods: **as**, **is** and **equals**
+All interfaces and classes  have 3 methods: **$as**, **$is** and **$equals**
 
 Casting class instance to interface:
 ```js
 var classInstance = new MultiImplementation();
-var baseInterface = classInstance.as('IBase');
+var baseInterface = classInstance.$as('IBase');
 //baseInterface has only 2 methods 'method1' and 'method2'
 baseInterface.method1();
 baseInterface.method3();//exception: undefined is not a function
@@ -81,38 +81,40 @@ baseInterface.method3();//exception: undefined is not a function
 
 Casting interface to another interface:
 ```js
-var base2Interface = baseInterface.as('IBase2');
+var base2Interface = baseInterface.$as('IBase2');
 base2Interface.method3();
-var derived2Interface = baseInterface.as('IDerived2');//derived2Interface will be null because  MultiImplementation class doesn't implement IDerived2
+var derived2Interface = baseInterface.$as('IDerived2');
+//derived2Interface will be null because MultiImplementation class doesn't implement IDerived2
 ```
 
 Casting interface to class instance:
 ```js
-var anotherClassInstanceReference = base2Interface.as(MultiImplementation);//class may be specified as constructor or as string 'MultiImplementation'
+//class may be specified as constructor or as string 'MultiImplementation'
+var anotherClassInstanceReference = base2Interface.$as(MultiImplementation);
 anotherClassInstanceReference === classInstance;//true
 ```
 
-To check if interface or class instance can be casted to some interface or class use **is** method:
+To check if interface or class instance can be casted to some interface or class use **$is** method:
 ```js
-classInstance.is('IBase');//true
-classInstance.is('IDerived2');//false
-base2Interface.is('IDerived');//true
-base2Interface.is('MultiImplementation');//true
-base2Interface.is('IDerived2');//false
+classInstance.$is('IBase');//true
+classInstance.$is('IDerived2');//false
+base2Interface.$is('IDerived');//true
+base2Interface.$is('MultiImplementation');//true
+base2Interface.$is('IDerived2');//false
 ```
 
-To compare interface references or class instance references use **equals** method:
+To compare interface references or class instance references use **$equals** method:
 ```js
 var anotherClassInstance = new MultiImplementation();
-var anotherBaseInterface = anotherClassInstance.as('IBase');
+var anotherBaseInterface = anotherClassInstance.$as('IBase');
 
-classInstance.equals(base2Interface);//true
-classInstance.equals(baseInterface);//true
-classInstance.equals(anotherBaseInterface);//false
-baseInterface.equals(classInstance);//true
-baseInterface.equals(base2Interface);//true
-baseInterface.equals(anotherBaseInterface);//false
-baseInterface.equals(anotherClassInstance);//false
+classInstance.$equals(base2Interface);//true
+classInstance.$equals(baseInterface);//true
+classInstance.$equals(anotherBaseInterface);//false
+baseInterface.$equals(classInstance);//true
+baseInterface.$equals(base2Interface);//true
+baseInterface.$equals(anotherBaseInterface);//false
+baseInterface.$equals(anotherClassInstance);//false
 ```
 Equality means that compared interfaces belong to the same class instance
 

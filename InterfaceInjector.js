@@ -49,7 +49,7 @@ Ext.define("Ext.InterfaceInjector", {
                 }
             });
 
-            var updateInjector = function (interfaceName) {
+            var updateInjector = function updateInjector (interfaceName) {
                 //IDependency and ISingleton can not be implemented directly - it has no sense
                 if (Ext.InterfaceManager.isDerivedFrom(interfaceName, 'IDependency') && interfaceName !== 'ISingleton') {
                     me.register(interfaceName, data.$className, isSingleton);
@@ -194,6 +194,6 @@ Ext.define("Ext.InterfaceInjector", {
                 me.singletons[dependencyConfig.className] = result;
             }
         }
-        return result.as(interfaceName);
+        return result.$as(interfaceName);
     }
 });
