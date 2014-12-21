@@ -41,7 +41,7 @@ Ext.defineInterface('IEventsProperties', {
     events: ['myEvent'],
     properties: [
         'myProperty',
-        { name: 'onlyGetterProperty', onlyGet: true}
+        { name: 'onlyGetterProperty', onlyGet: true }
     ]
 });
 ```
@@ -80,9 +80,7 @@ Ext.define('MultiImplementation', {
 ```
 If class doesn't implement all methods of all specified interfaces, an exception will be thrown.
 
-If interface is defined with events, then implementation must have an appropriate 'on...' and 'un...' methods.
-
-If interface is defined with properties, then implementation must have an appropriate 'get...' and 'set...' methods.
+If interface is defined with events, then implementation must have an appropriate 'on...' and 'un...' methods. If interface is defined with properties, then implementation must have an appropriate 'get...' and 'set...' methods.
 ```js
 Ext.define('EventsProperties', {
     implement: 'IEventsProperties',
