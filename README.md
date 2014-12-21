@@ -6,7 +6,7 @@ Extension consists of 2 parts:
 - Interface Manager - the core
 - Interface Injector - utilizes Deft.Injector for interface injection
 
-Tested with ExtJs 5.1 and DeftJS5
+Tested with ExtJs 5.0.1 and DeftJS5
 
 ##Interface Manager
 **Ext.InterfaceManager** provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
@@ -34,6 +34,19 @@ Ext.defineInterface('IDerived2', {
     methods: 'derivedMethod2'
 });
 ```
+
+Interfaces also support definition of events and properties:
+```js
+Ext.defineInterface('IEventsProperties', {
+    events: ['myEvent'],
+    properties: [
+        'myProperty',
+        { name: 'onlyGetterProperty', onlyGet: true}
+    ]
+});
+```
+If interface definition has event named 'myEvent', then this event will be presented in interface with two methods: 'onMyEvent' and 'unMyEvent'. These methods have almost the same signature as methods 'on' and 'un' of Ext.util.Observable with the difference that they don't accept event name.
+If interface definition has property named 'myProperty', then this property will be presented in interface with methods 'myProperty'. If interface property is called with no parameters, it works like getter. If it is called with one parameter, it works like setter. **onlyGet** properties can be called only as getter.
 
 ###Interface implementation
 
@@ -65,6 +78,47 @@ Ext.define('MultiImplementation', {
 });
 ```
 If class doesn't implement all methods of all specified interfaces, an exception will be thrown.
+
+If interface is defined with events, then implementation must have an appropriate 'on...' and 'un...' methods.
+If interface is defined with properties, then implementation must have an appropriate 'get...' and 'set...' methods.
+```js
+Ext.define('EventsProperties', {
+    implement: 'IEventsProperties',
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
+
+    constructor: function () {
+        this.mixins.observable.constructor.call(this);
+        this.myProperty = null;
+        this.onlyGetterProperty = null;
+    },
+
+    onMyEvent: function () {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift('myEvent');
+        this.on.apply(this, args);
+    },
+
+    unMyEvent: function () {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift('myEvent');
+        this.un.apply(this, args);
+    },
+
+    getMyProperty: function () {
+        return this.myProperty;
+    },
+
+    setMyProperty: function (value) {
+        this.myProperty = value;
+    },
+
+    getOnlyGetterProperty: function () {
+        return this.onlyGetterProperty;
+    }
+});
+```
 
 ###In action
 
