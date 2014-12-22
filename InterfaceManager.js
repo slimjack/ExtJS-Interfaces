@@ -173,10 +173,10 @@ Ext.define("Ext.InterfaceManager", {
         if (!Ext.isFunction(getter)) {
             Ext.Error.raise('"' + classInstance.$className + '" has no getter implementation for "' + $interface._interfaceName + '.' + property.name + '" property.');
         }
-        if (property.onlyGet) {
+        if (property.readOnly) {
             $interface[property.name] = function () {
                 if (arguments.length) {
-                    Ext.Error.raise('"' + $interface._interfaceName + '.' + property.name + '" property defined as onlyGet. Thus it cannot be used to set value');
+                    Ext.Error.raise('"' + $interface._interfaceName + '.' + property.name + '" property defined as readOnly. Thus it cannot be used to set value');
                 }
                 return getter.call(classInstance);
             }
