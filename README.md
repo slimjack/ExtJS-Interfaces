@@ -41,13 +41,13 @@ Ext.defineInterface('IEventsProperties', {
     events: ['myEvent'],
     properties: [
         'myProperty',
-        { name: 'onlyGetterProperty', onlyGet: true }
+        { name: 'readOnlyProperty', readOnly: true }
     ]
 });
 ```
-If interface definition has event named 'myEvent', then this event will be presented in interface with two methods: 'onMyEvent' and 'unMyEvent'. These methods have almost the same signature as methods 'on' and 'un' of Ext.util.Observable with the difference that they don't accept event name.
+If interface definition has event named *myEvent*, then this event will be presented in interface with two methods: *onMyEvent* and *unMyEvent*. These methods have almost the same signature as methods *on* and *un* of Ext.util.Observable with the difference that they don't accept event name.
 
-If interface definition has property named 'myProperty', then this property will be presented in interface with methods 'myProperty'. If interface property is called with no parameters, it works like getter. If it is called with one parameter, it works like setter. **onlyGet** properties can be called only as getter.
+If interface definition has property named *myProperty*, then this property will be presented in interface with method *myProperty*. If interface property is called with no parameters, it works like a getter. If it is called with one parameter, it works like a setter. **readOnly** properties can be called only as getter.
 
 ###Interface implementation
 
@@ -80,7 +80,7 @@ Ext.define('MultiImplementation', {
 ```
 If class doesn't implement all methods of all specified interfaces, an exception will be thrown.
 
-If interface is defined with events, then implementation must have an appropriate 'on...' and 'un...' methods. If interface is defined with properties, then implementation must have an appropriate 'get...' and 'set...' methods.
+If interface is defined with events, then implementation must have an appropriate *on...* and *un...* methods. If interface is defined with properties, then implementation must have an appropriate *get...* and *set...* methods.
 ```js
 Ext.define('EventsProperties', {
     implement: 'IEventsProperties',
@@ -91,7 +91,7 @@ Ext.define('EventsProperties', {
     constructor: function () {
         this.mixins.observable.constructor.call(this);
         this.myProperty = null;
-        this.onlyGetterProperty = null;
+        this.readOnlyProperty = null;
     },
 
     onMyEvent: function () {
@@ -114,8 +114,8 @@ Ext.define('EventsProperties', {
         this.myProperty = value;
     },
 
-    getOnlyGetterProperty: function () {
-        return this.onlyGetterProperty;
+    getReadOnlyProperty: function () {
+        return this.readOnlyProperty;
     }
 });
 ```
@@ -283,7 +283,3 @@ Ext.define('ConsoleLogger', {
 });
 instance.test();//will print 'test' to console
 ```
-
-
-
-
