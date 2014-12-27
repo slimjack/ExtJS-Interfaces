@@ -155,12 +155,12 @@ Ext.define("Ext.InterfaceManager", {
         var me = this;
         var interfaceDefinition = me.interfaceDefinitions[$interface._interfaceName];
         Ext.Array.forEach(interfaceDefinition.methods, function (methodName) {
-            me.bindInterfaceMethod($interface, classInstance, methodName);
+            $interface[methodName] = Ext.bind(classInstance[methodName], classInstance);
         });
         Ext.Array.forEach(interfaceDefinition.events, function (eventName) {
             var capitalizedEventName = Ext.String.capitalize(eventName);
-            me.bindInterfaceMethod($interface, classInstance, 'on' + capitalizedEventName);
-            me.bindInterfaceMethod($interface, classInstance, 'un' + capitalizedEventName);
+            $interface['on' + capitalizedEventName] = Ext.bind(classInstance['on' + capitalizedEventName], classInstance);
+            $interface['un' + capitalizedEventName] = Ext.bind(classInstance['un' + capitalizedEventName], classInstance);
         });
         Ext.Array.forEach(interfaceDefinition.properties, function (property) {
             me.bindInterfaceProperty($interface, classInstance, property);
@@ -170,9 +170,6 @@ Ext.define("Ext.InterfaceManager", {
     bindInterfaceProperty: function ($interface, classInstance, property) {
         var capitalizedPropertyName = Ext.String.capitalize(property.name);
         var getter = classInstance['get' + capitalizedPropertyName];
-        if (!Ext.isFunction(getter)) {
-            Ext.Error.raise('"' + classInstance.$className + '" has no getter implementation for "' + $interface._interfaceName + '.' + property.name + '" property.');
-        }
         if (property.readOnly) {
             $interface[property.name] = function () {
                 if (arguments.length) {
@@ -182,9 +179,6 @@ Ext.define("Ext.InterfaceManager", {
             }
         } else {
             var setter = classInstance['set' + capitalizedPropertyName];
-            if (!Ext.isFunction(setter)) {
-                Ext.Error.raise('"' + classInstance.$className + '" has no setter implementation for "' + $interface._interfaceName + '.' + property.name + '" property.');
-            }
             $interface[property.name] = function (value) {
                 if (arguments.length > 1) {
                     Ext.Error.raise('"' + $interface._interfaceName + '.' + property.name + '" property cannot be called with more than one parameter');
@@ -197,14 +191,6 @@ Ext.define("Ext.InterfaceManager", {
             }
         }
 
-    },
-
-    bindInterfaceMethod: function ($interface, classInstance, methodName) {
-        if (Ext.isFunction(classInstance[methodName])) {
-            $interface[methodName] = Ext.bind(classInstance[methodName], classInstance);
-        } else {
-            Ext.Error.raise('"' + classInstance.$className + '" has no implementation for "' + $interface._interfaceName + '.' + methodName + '".');
-        }
     },
 
     inherits: function (targetInterfaceName, parentInterfaceName) {
@@ -229,12 +215,53 @@ Ext.define("Ext.InterfaceManager", {
             if (!me.interfaceDefinitions[interfaceName]) {
                 Ext.Error.raise('Interface "' + interfaceName + ' is not defined');
             }
-            var interfaceMethods = me.interfaceDefinitions[interfaceName].methods;
-            Ext.Array.each(interfaceMethods, function (methodName) {
-                if (!Ext.isFunction(targetClass[methodName])) {
-                    Ext.Error.raise('"' + targetClass.$className + '" has no implementation for "' + interfaceName + '.' + methodName + '".');
+            me.validateMethods(targetClass, me.interfaceDefinitions[interfaceName]);
+            me.validateEvents(targetClass, me.interfaceDefinitions[interfaceName]);
+            me.validateProperties(targetClass, me.interfaceDefinitions[interfaceName]);
+        });
+    },
+
+    validateMethods: function (targetClass, $interface) {
+        var me = this;
+        var interfaceMethods = $interface.methods;
+        Ext.Array.each(interfaceMethods, function (methodName) {
+            if (!Ext.isFunction(targetClass[methodName])) {
+                Ext.Error.raise('"' + targetClass.$className + '" has no implementation for "' + $interface._interfaceName + '.' + methodName + '".');
+            }
+        });
+    },
+
+    validateEvents: function (targetClass, $interface) {
+        var me = this;
+        var interfaceEvents = $interface.events;
+        Ext.Array.each(interfaceEvents, function (eventName) {
+            var capitalizedEventName = Ext.String.capitalize(eventName);
+            var subscriberMethodName = 'on' + capitalizedEventName;
+            if (!Ext.isFunction(targetClass[subscriberMethodName])) {
+                Ext.Error.raise('"' + targetClass.$className + '" has no subscribe method "' + subscriberMethodName + '" for "' + $interface._interfaceName + '.' + eventName + '" event.');
+            }
+            var unsubscriberMethodName = 'un' + capitalizedEventName;
+            if (!Ext.isFunction(targetClass[unsubscriberMethodName])) {
+                Ext.Error.raise('"' + targetClass.$className + '" has no unsubscribe method "' + unsubscriberMethodName + '" for "' + $interface._interfaceName + '.' + eventName + '" event.');
+            }
+        });
+    },
+
+    validateProperties: function (targetClass, $interface) {
+        var me = this;
+        var interfaceProperties = $interface.properties;
+        Ext.Array.each(interfaceProperties, function (property) {
+            var capitalizedPropertyName = Ext.String.capitalize(property.name);
+            var getterName = 'get' + capitalizedPropertyName;
+            if (!Ext.isFunction(targetClass[getterName])) {
+                Ext.Error.raise('"' + targetClass.$className + '" has no getter for "' + $interface._interfaceName + '.' + property.name + '" property.');
+            }
+            if (!property.readOnly) {
+                var setterName = 'set' + capitalizedPropertyName;
+                if (!Ext.isFunction(targetClass[setterName])) {
+                    Ext.Error.raise('"' + targetClass.$className + '" has no setter for "' + $interface._interfaceName + '.' + property.name + '" property.');
                 }
-            });
+            }
         });
     },
 
