@@ -8,6 +8,9 @@ Extension consists of 2 parts:
 
 Tested with ExtJs 5.0.1 and DeftJS5
 
+#Dependencies
+**ExtJs-Interfaces** depends on [**ExtJs-Utils**](https://github.com/slimjack/ExtJs-Utils)
+
 ##Interface Manager
 **Ext.InterfaceManager** provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
 
