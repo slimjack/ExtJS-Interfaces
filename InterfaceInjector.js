@@ -1,9 +1,9 @@
 ﻿//https://github.com/slimjack/ExtJs-Interfaces
 Ext.define("Ext.InterfaceInjector", {
     singleton: true,
-    requires: ['Ext.InterfaceManager', 'Ext.util.Lookup'],
+    requires: ['Ext.InterfaceManager', 'Ext.ux.util.Lookup'],
 
-    interfaceMap: new Ext.util.Lookup(),
+    interfaceMap: new Ext.ux.util.Lookup(),
     singletons: {},
     suppressedClasses: [],
     deferredSingletons: [],
@@ -31,6 +31,10 @@ Ext.define("Ext.InterfaceInjector", {
         //Register all IDependency and ISingleton classes in Deft.Injector
         Ext.Function.interceptBefore(Ext.Class, 'onBeforeCreated', function (Class, data, hooks) {
             //suppress is the name of class to be suppressed in DI container. Suppressed class will be treated as non-registered (will never be injected)
+            if (data.abstractClass) {
+                return;
+            }
+
             if (data.suppress) {
                 me.suppress(data.suppress);
             }
