@@ -30,11 +30,12 @@ Ext.define("Ext.InterfaceInjector", {
         var me = this;
         //Register all IDependency and ISingleton classes in Deft.Injector
         Ext.Function.interceptBefore(Ext.Class, 'onBeforeCreated', function (Class, data, hooks) {
-            //suppress is the name of class to be suppressed in DI container. Suppressed class will be treated as non-registered (will never be injected)
+            //Abstract classes are excluded from injection container
             if (data.abstractClass) {
                 return;
             }
 
+            //Suppress is the name of class to be suppressed in DI container. Suppressed class will be treated as non-registered (will never be injected)
             if (data.suppress) {
                 me.suppress(data.suppress);
             }
@@ -53,7 +54,7 @@ Ext.define("Ext.InterfaceInjector", {
                 }
             });
 
-            var updateInjector = function updateInjector (interfaceName) {
+            var updateInjector = function (interfaceName) {
                 //IDependency and ISingleton can not be implemented directly - it has no sense
                 if (Ext.InterfaceManager.isDerivedFrom(interfaceName, 'IDependency') && interfaceName !== 'ISingleton') {
                     me.register(interfaceName, data.$className, isSingleton);
