@@ -1,4 +1,4 @@
-![](/icon.png)ExtJs-Interfaces
+![](/icon.png)ExtJS-Interfaces
 ================
 
 Introduces the concept of interfaces into ExtJs.
@@ -6,10 +6,10 @@ Extension consists of 2 parts:
 - Interface Manager - the core
 - Interface Injector - utilizes Deft.Injector for interface injection
 
-Tested with ExtJs 5.0.1 and DeftJS5
+Tested with ExtJS 5.0.1 and DeftJS5
 
 #Dependencies
-**ExtJs-Interfaces** depends on [**ExtJs-Utils**](https://github.com/slimjack/ExtJs-Utils)
+**ExtJS-Interfaces** depends on [**ExtJS-Utils**](https://github.com/slimjack/ExtJS-Utils)
 
 ##Interface Manager
 **Ext.InterfaceManager** provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
