@@ -1,7 +1,7 @@
 ![](/icon.png)ExtJS-Interfaces
 ================
 
-Introduces the concept of interfaces into ExtJs.
+Introduces the concept of interfaces into ExtJS.
 Extension consists of 2 parts:
 - Interface Manager - the core
 - Interface Injector - utilizes Deft.Injector for interface injection
