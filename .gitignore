@@ -1,0 +1,10 @@
+*.dll
+*.config
+bin/*
+obj/*
+*.pdb
+*.csproj
+ExtJs-Interfaces.csproj.user
+Libs/*
+Tests/jasmine.js
+Properties/AssemblyInfo.cs

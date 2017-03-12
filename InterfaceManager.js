@@ -22,7 +22,7 @@ Ext.define("Ext.InterfaceManager", {
         if (me.interfaceDefinitions[interfaceName]) {
             Ext.Error.raise('Interface "' + interfaceName + '" already defined');
         }
-        me.interfaceDefinitions[interfaceName] = me.createInterfaceDefinition(config);
+        me.interfaceDefinitions[interfaceName] = me.createInterfaceDefinition(config, interfaceName);
     },
 
     //Checks if instance implements specified interface
@@ -81,7 +81,7 @@ Ext.define("Ext.InterfaceManager", {
     //endregion
 
     //region Private
-    createInterfaceDefinition: function (config) {
+    createInterfaceDefinition: function (config, interfaceName) {
         var me = this;
         config.events = Ext.Array.from(config.events);
         config.properties = Ext.Array.from(config.properties);
@@ -99,7 +99,8 @@ Ext.define("Ext.InterfaceManager", {
             parents: config.inherit,
             methods: config.methods,
             properties: config.properties,
-            events: config.events
+            events: config.events,
+            name: interfaceName
         };
     },
 
@@ -130,9 +131,12 @@ Ext.define("Ext.InterfaceManager", {
             _interfaceName: interfaceName,
             //Casts interface to another interface or to class instance
             $as: function (interfaceOrClassName) {
-                if (Ext.isFunction(interfaceOrClassName) || window[interfaceOrClassName]) {
-                    var ctorToCompare = Ext.isFunction(interfaceOrClassName) ? interfaceOrClassName : window[interfaceOrClassName];
-                    return classInstance instanceof ctorToCompare ? classInstance : null;
+                var Class = null;
+                try {
+                    Class = eval(interfaceOrClassName);
+                } catch (ex) { }
+                if (Ext.isFunction(Class)) {
+                    return classInstance instanceof Class ? classInstance : null;
                 } else {
                     return classInstance.$as(interfaceOrClassName);
                 }
@@ -221,45 +225,45 @@ Ext.define("Ext.InterfaceManager", {
         });
     },
 
-    validateMethods: function (targetClass, $interface) {
+    validateMethods: function (targetClass, interfaceDefinition) {
         var me = this;
-        var interfaceMethods = $interface.methods;
+        var interfaceMethods = interfaceDefinition.methods;
         Ext.Array.each(interfaceMethods, function (methodName) {
             if (!Ext.isFunction(targetClass[methodName])) {
-                Ext.Error.raise('"' + targetClass.$className + '" has no implementation for "' + $interface._interfaceName + '.' + methodName + '".');
+                Ext.Error.raise('"' + targetClass.$className + '" has no implementation for "' + interfaceDefinition.name + '.' + methodName + '".');
             }
         });
     },
 
-    validateEvents: function (targetClass, $interface) {
+    validateEvents: function (targetClass, interfaceDefinition) {
         var me = this;
-        var interfaceEvents = $interface.events;
+        var interfaceEvents = interfaceDefinition.events;
         Ext.Array.each(interfaceEvents, function (eventName) {
             var capitalizedEventName = Ext.String.capitalize(eventName);
             var subscriberMethodName = 'on' + capitalizedEventName;
             if (!Ext.isFunction(targetClass[subscriberMethodName])) {
-                Ext.Error.raise('"' + targetClass.$className + '" has no subscribe method "' + subscriberMethodName + '" for "' + $interface._interfaceName + '.' + eventName + '" event.');
+                Ext.Error.raise('"' + targetClass.$className + '" has no subscribe method "' + subscriberMethodName + '" for "' + interfaceDefinition.name + '.' + eventName + '" event.');
             }
             var unsubscriberMethodName = 'un' + capitalizedEventName;
             if (!Ext.isFunction(targetClass[unsubscriberMethodName])) {
-                Ext.Error.raise('"' + targetClass.$className + '" has no unsubscribe method "' + unsubscriberMethodName + '" for "' + $interface._interfaceName + '.' + eventName + '" event.');
+                Ext.Error.raise('"' + targetClass.$className + '" has no unsubscribe method "' + unsubscriberMethodName + '" for "' + interfaceDefinition.name + '.' + eventName + '" event.');
             }
         });
     },
 
-    validateProperties: function (targetClass, $interface) {
+    validateProperties: function (targetClass, interfaceDefinition) {
         var me = this;
-        var interfaceProperties = $interface.properties;
+        var interfaceProperties = interfaceDefinition.properties;
         Ext.Array.each(interfaceProperties, function (property) {
             var capitalizedPropertyName = Ext.String.capitalize(property.name);
             var getterName = 'get' + capitalizedPropertyName;
             if (!Ext.isFunction(targetClass[getterName])) {
-                Ext.Error.raise('"' + targetClass.$className + '" has no getter for "' + $interface._interfaceName + '.' + property.name + '" property.');
+                Ext.Error.raise('"' + targetClass.$className + '" has no getter for "' + interfaceDefinition.name + '.' + property.name + '" property.');
             }
             if (!property.readOnly) {
                 var setterName = 'set' + capitalizedPropertyName;
                 if (!Ext.isFunction(targetClass[setterName])) {
-                    Ext.Error.raise('"' + targetClass.$className + '" has no setter for "' + $interface._interfaceName + '.' + property.name + '" property.');
+                    Ext.Error.raise('"' + targetClass.$className + '" has no setter for "' + interfaceDefinition.name + '.' + property.name + '" property.');
                 }
             }
         });
@@ -289,9 +293,12 @@ Ext.define("Ext.InterfaceManager", {
             },
             //Checks if class instance is of specified class or may be casted to specified interface
             $is: function (interfaceOrClassName) {
-                if (Ext.isFunction(interfaceOrClassName) || window[interfaceOrClassName]) {
-                    var ctorToCompare = Ext.isFunction(interfaceOrClassName) ? interfaceOrClassName : window[interfaceOrClassName];
-                    return this instanceof ctorToCompare;
+                var Class = null;
+                try {
+                    Class = eval(interfaceOrClassName);
+                } catch (ex) { }
+                if (Ext.isFunction(Class)) {
+                    return this instanceof Class;
                 } else {
                     return me.instanceImplements(this, interfaceOrClassName);
                 }

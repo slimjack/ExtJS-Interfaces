@@ -20,7 +20,7 @@ Ext.define("Ext.InterfaceInjector", {
         Ext.defineInterface('ISingleton', {
             inherit: 'IDependency'
         });
-        
+
         me.registerInjectPreprocessor();
         me.registerDeferredSingletonPostprocessor();
         me.registerClassDefinitionInterceptor();
@@ -35,7 +35,7 @@ Ext.define("Ext.InterfaceInjector", {
                 return;
             }
 
-            //Suppress is the name of class to be suppressed in DI container. Suppressed class will be treated as non-registered (will never be injected)
+            //suppress is the name of class to be suppressed in DI container. Suppressed class will be treated as non-registered (will never be injected)
             if (data.suppress) {
                 me.suppress(data.suppress);
             }
@@ -45,7 +45,7 @@ Ext.define("Ext.InterfaceInjector", {
             var implementedInterfaces = data.implement || superclassImplementedInterfaces;
 
             implementedInterfaces = Ext.Array.from(implementedInterfaces);
-            //ISingleton has higher instantiation priority
+            //ISingleton has higher instantiation priority. So, if class has at least one ISingleton in it's hierachy, class will be treated as singleton (IDependency is ignored in this case)
             var isSingleton = false;
             Ext.Array.each(implementedInterfaces, function (implementedInterfaceName) {
                 isSingleton = Ext.InterfaceManager.isDerivedFrom(implementedInterfaceName, 'ISingleton');
@@ -54,19 +54,14 @@ Ext.define("Ext.InterfaceInjector", {
                 }
             });
 
-            var updateInjector = function (interfaceName) {
-                //IDependency and ISingleton can not be implemented directly - it has no sense
-                if (Ext.InterfaceManager.isDerivedFrom(interfaceName, 'IDependency') && interfaceName !== 'ISingleton') {
-                    me.register(interfaceName, data.$className, isSingleton);
-                } else if (interfaceName !== 'ISingleton' && interfaceName !== 'IDependency') {
-                    Ext.Error.raise('Interface "' + interfaceName + '" is not injectable or not defined');
-                }
-            };
-
             Ext.Array.each(implementedInterfaces, function (implementedInterfaceName) {
-                updateInjector(implementedInterfaceName);
+                if (Ext.InterfaceManager.isDerivedFrom(implementedInterfaceName, 'IDependency') && implementedInterfaceName !== 'ISingleton') {
+                    me.register(implementedInterfaceName, data.$className, isSingleton);
+                }
                 Ext.InterfaceManager.eachParent(implementedInterfaceName, function (parentInterfaceName) {
-                    updateInjector(parentInterfaceName);
+                    if (Ext.InterfaceManager.isDerivedFrom(parentInterfaceName, 'IDependency') && parentInterfaceName !== 'ISingleton') {
+                        me.register(parentInterfaceName, data.$className, isSingleton);
+                    }
                 });
             });
         });
@@ -194,7 +189,7 @@ Ext.define("Ext.InterfaceInjector", {
         if (dependencyConfig.isSingleton && me.singletons[dependencyConfig.className]) {
             result = me.singletons[dependencyConfig.className];
         } else {
-            var result =  Ext.create(dependencyConfig.className);
+            var result = Ext.create(dependencyConfig.className);
             if (dependencyConfig.isSingleton) {
                 me.singletons[dependencyConfig.className] = result;
             }
