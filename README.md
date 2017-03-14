@@ -6,7 +6,7 @@ Extension consists of 2 parts:
 - Interface Manager - the core
 - Interface Injector - utilizes Deft.Injector for interface injection
 
-Tested with ExtJS 5.0.1 and DeftJS5
+Tested with ExtJS 6.2 and DeftJS5
 
 # Dependencies
 **ExtJS-Interfaces** depends on [**ExtJS-Utils**](https://github.com/slimjack/ExtJS-Utils)
