@@ -41,7 +41,7 @@ describe('InterfaceInjector.', function () {
             implement: ['IBaseSingleton']
         });
 
-        it('Instance of class derived from IDependency ancestor may be injected by means of Deft IOC', function () {
+        it('Instance of class derived from IDependency ancestor may be injected by means of Deft DI container', function () {
             Ext.define('SingleInjectionTest', {
                 inject: {
                     baseDependencyInstance: 'IBaseDependency'
