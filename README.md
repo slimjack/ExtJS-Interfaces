@@ -8,13 +8,13 @@ Extension consists of 2 parts:
 
 Tested with ExtJS 5.0.1 and DeftJS5
 
-#Dependencies
+# Dependencies
 **ExtJS-Interfaces** depends on [**ExtJS-Utils**](https://github.com/slimjack/ExtJS-Utils)
 
-##Interface Manager
+## Interface Manager
 **Ext.InterfaceManager** provides functionality for registering of interfaces and defining their implementations. It also extends Ext.Base class with methods to work with interfaces.
 
-###Interface definition
+### Interface definition
 
 To define interface use **Ext.defineInterface**:
 ```js
@@ -52,7 +52,7 @@ If interface definition has event named *myEvent*, then this event will be prese
 
 If interface definition has property named *myProperty*, then this property will be presented in interface with method *myProperty*. If interface property is called with no parameters, it works like a getter. If it is called with one parameter, it works like a setter. **readOnly** properties can be called only as getter.
 
-###Interface implementation
+### Interface implementation
 
 To specify that class implements interface use **implement** config in class definition:
 ```js
@@ -123,7 +123,7 @@ Ext.define('EventsProperties', {
 });
 ```
 
-###In action
+### In action
 
 All interfaces and classes  have 3 methods: **$as**, **$is** and **$equals**. **$** is used to avoid conflicts with existing methods.
 
@@ -175,7 +175,7 @@ baseInterface.$equals(anotherClassInstance);//false
 ```
 Equality means that compared interfaces belong to the same class instance
 
-##Interface Injector
+## Interface Injector
 **Ext.InterfaceInjector** extends DeftJs injection system with ability to inject interface instances. It defines 2 interfaces: **IDependency** and **ISingleton** (derived from **IDependency**).
 
 To define injectable interface it must be derived from IDependency or ISingleton:
