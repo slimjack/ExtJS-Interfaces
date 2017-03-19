@@ -54,7 +54,7 @@ describe('InterfaceInjector.', function () {
             expect(instance.baseDependencyInstance.$is(BaseDependencyClass)).toBe(true);
         });
 
-        it('Instances of all classes derived from IDependency ancestor may be injected by means of Deft IOC', function () {
+        it('Instances of all classes derived from IDependency ancestor may be injected by means of Deft DI container', function () {
             Ext.define('AnotherBaseDependencyClass', {
                 implement: ['IBaseDependency']
             });
