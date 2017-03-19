@@ -1,7 +1,7 @@
-﻿/// <reference path="jasmine.js" />
-/// <reference path="../Libs/ext-all-debug.js" />
-/// <reference path="../Libs/deft-debug.js" />
-/// <reference path="../Libs/ext-utils-all.js" />
+﻿/// <reference path="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/jasmine.js" />
+/// <reference path="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all-debug.js" />
+/// <reference path="https://github.com/deftjs/DeftJS5/releases/download/v5.0.0-alpha.1/deft-debug.js" />
+/// <reference path="https://github.com/slimjack/ExtJS-Utils/releases/download/v0.1.0/ext-utils-all.js" />
 /// <reference path="../InterfaceManager.js" />
 /// <reference path="../InterfaceInjector.js" />
 

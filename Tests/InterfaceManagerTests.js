@@ -1,5 +1,5 @@
-﻿/// <reference path="jasmine.js" />
-/// <reference path="../Libs/ext-all-debug.js" />
+﻿/// <reference path="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/jasmine.js" />
+/// <reference path="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all-debug.js" />
 /// <reference path="../InterfaceManager.js" />
 
 describe('Interfaces.', function () {
