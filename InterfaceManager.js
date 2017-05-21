@@ -33,12 +33,12 @@ Ext.define("Ext.InterfaceManager", {
             Ext.Error.raise('Interface "' + interfaceName + '" is not defined');
         }
 
-        if (Ext.Array.contains(instance.implement, interfaceName)) {
-            return true;
-        }
-
         if (!Ext.isArray(instance.implement)) {
             return false;
+        }
+
+        if (Ext.Array.contains(instance.implement, interfaceName)) {
+            return true;
         }
 
         var result = false;
@@ -305,7 +305,7 @@ Ext.define("Ext.InterfaceManager", {
             },
             //Checks if interface belongs to this class instance or specified class instance is this class instance
             $equals: function (interfaceOrClassInstance) {
-                return (interfaceOrClassInstance === this) || (this._interfaces && this._interfaces[interfaceOrClassInstance._interfaceName] === interfaceOrClassInstance);
+                return (interfaceOrClassInstance === this) || (this._interfaces && !!interfaceOrClassInstance._interfaceName && this._interfaces[interfaceOrClassInstance._interfaceName] === interfaceOrClassInstance);
             }
         });
     }

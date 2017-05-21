@@ -83,14 +83,28 @@ describe('Interfaces.', function () {
 
     describe('Basic methods.', function () {
         var baseClassInstance = new Ext.Base();
-        it('Instance of any class should be equipped with "as" method', function () {
+        Ext.define('BaseImplementation', {
+            implement: 'IBase',
+            baseMethod: function () { }
+        });
+        var baseImplementation = new BaseImplementation();
+        it('Instance of any class should be equipped with "$as" method', function () {
             expect(baseClassInstance.$as).toBeDefined();
         });
-        it('Instance of any class should be equipped with "is" method', function () {
+        it('"$as" method can be called on native Ext classes', function () {
+            expect(baseClassInstance.$as('IBase')).toBeNull();
+        });
+        it('Instance of any class should be equipped with "$is" method', function () {
             expect(baseClassInstance.$is).toBeDefined();
         });
-        it('Instance of any class should be equipped with "isInstance" method', function () {
+        it('"$is" method can be called on native Ext classes', function () {
+            expect(baseClassInstance.$is('IBase')).toBe(false);
+        });
+        it('Instance of any class should be equipped with "$equals" method', function () {
             expect(baseClassInstance.$equals).toBeDefined();
+        });
+        it('"$equals" method can be called on native Ext classes', function () {
+            expect(baseClassInstance.$equals(baseImplementation.$as('IBase'))).toBe(false);
         });
     });
 
